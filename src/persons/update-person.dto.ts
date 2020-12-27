@@ -1,1 +1,3 @@
-export class UpdatePersonDto {}
+export class UpdatePersonDto {
+  readonly name?: string;
+}
