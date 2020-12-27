@@ -1,36 +1,47 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Person } from './person.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreatePersonDto } from './create-person.dto';
+import { UpdatePersonDto } from './update-person.dto';
 
 @Injectable()
 export class PersonsService {
-  private persons: Person[] = [{ id: 1, name: 'Farshad' }];
+  constructor(
+    @InjectRepository(Person)
+    private personRepository: Repository<Person>,
+  ) {}
 
   findAll() {
-    return this.persons;
+    return this.personRepository.find();
   }
 
-  findOne(id: string) {
-    const person = this.persons.find((item) => item.id === +id);
+  async findOne(id: string) {
+    const person = await this.personRepository.findOne(id);
     if (!person) {
       throw new NotFoundException('person with ${id} not found');
     }
     return person;
   }
 
-  create(createPersonDto: any) {
-    this.persons.push(createPersonDto);
+  create(createPersonDto: CreatePersonDto) {
+    const person = this.personRepository.create(createPersonDto);
+    return this.personRepository.save(person);
   }
 
-  update(id: string, updatePersonDto: any) {
-    const existingPerson = this.findOne(id);
-    if (existingPerson) {
+  async update(id: string, updatePersonDto: UpdatePersonDto) {
+    const person = await this.personRepository.preload({
+      id: +id,
+      ...updatePersonDto,
+    });
+    if (!person) {
+      throw new NotFoundException('person with this ID not found');
     }
+    return this.personRepository.save(person);
   }
 
-  remove(id: string) {
-    const personInex = this.persons.findIndex((item) => item.id === +id);
-    if (personInex >= 0) {
-      this.persons.splice(personInex, 1);
-    }
+  async remove(id: string) {
+    const person = await this.findOne(id);
+    return this.personRepository.remove(person);
   }
 }

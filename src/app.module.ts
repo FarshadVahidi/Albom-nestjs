@@ -4,9 +4,23 @@ import { AppService } from './app.service';
 import { PersonsController } from './persons/persons.controller';
 import { PersonsService } from './persons/persons.service';
 import { PersonsModule } from './persons/persons.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Person } from './persons/person.entity';
 
 @Module({
-  imports: [PersonsModule],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'farshad',
+      password: 'password',
+      database: 'albom',
+      entities: [Person],
+      synchronize: true,
+    }),
+    PersonsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

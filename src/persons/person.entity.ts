@@ -1,6 +1,10 @@
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-
-export class Person{
+@Entity()
+export class Person {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   name: string;
 }
