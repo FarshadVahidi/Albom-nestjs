@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Person } from './person.entity';
 
 @Injectable()
@@ -10,7 +10,11 @@ export class PersonsService {
   }
 
   findOne(id: string) {
-    return this.persons.find( item => item.id === +id );
+    const person = this.persons.find((item) => item.id === +id);
+    if (!person) {
+      throw new NotFoundException('person with ${id} not found');
+    }
+    return person;
   }
 
   create(createPersonDto: any) {
@@ -19,13 +23,13 @@ export class PersonsService {
 
   update(id: string, updatePersonDto: any) {
     const existingPerson = this.findOne(id);
-    if ( existingPerson ) {
+    if (existingPerson) {
     }
   }
 
   remove(id: string) {
-    const personInex = this.persons.findIndex( item => item.id === +id);
-    if ( personInex >= 0 ) {
+    const personInex = this.persons.findIndex((item) => item.id === +id);
+    if (personInex >= 0) {
       this.persons.splice(personInex, 1);
     }
   }
