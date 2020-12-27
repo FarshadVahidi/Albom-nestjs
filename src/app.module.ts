@@ -5,6 +5,7 @@ import { PersonsController } from './persons/persons.controller';
 import { PersonsService } from './persons/persons.service';
 import { PersonsModule } from './persons/persons.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Person } from './persons/person.entity';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'farshad',
       password: 'password',
       database: 'albom',
-      entities: [],
+      entities: [Person],
       synchronize: true,
     }),
     PersonsModule,
