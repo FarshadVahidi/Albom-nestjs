@@ -1,23 +1,31 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { Person } from './person.entity';
 import { CreatePersonDto } from './create-person.dto';
 import { UpdatePersonDto } from './update-person.dto';
+import { Photo } from '../photos/photo.entity';
 
 @Injectable()
 export class PersonsService {
   constructor(
     @InjectRepository(Person)
     private personRepository: Repository<Person>,
+    @InjectRepository(Photo)
+    private photoRepository: Repository<Photo>,
+    private readonly connection: Connection,
   ) {}
 
   findAll() {
-    return this.personRepository.find();
+    return this.personRepository.find({
+      relations: ['photos'],
+    });
   }
 
   async findOne(id: string) {
-    const person = await this.personRepository.findOne(id);
+    const person = await this.personRepository.findOne(id, {
+      relations: ['photos'],
+    });
     if (!person) {
       throw new NotFoundException('person with ${id} not found');
     }
