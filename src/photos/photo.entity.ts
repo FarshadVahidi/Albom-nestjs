@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany } from 'typeorm';
 import { Person } from '../persons/person.entity';
+import { Albom } from '../albom/albom.entity';
 
 @Entity()
 export class Photo {
@@ -13,4 +14,7 @@ export class Photo {
     cascade: true,
   })
   person: Person;
+
+  @ManyToMany((type) => Albom, (albom) => albom.photos)
+  alboms: Albom[];
 }

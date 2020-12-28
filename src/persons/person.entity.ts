@@ -1,5 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToMany,
+} from 'typeorm';
 import { Photo } from '../photos/photo.entity';
+import { Albom } from '../albom/albom.entity';
 
 @Entity()
 export class Person {
@@ -11,4 +18,7 @@ export class Person {
 
   @OneToMany((type) => Photo, (photo) => photo.person)
   photos: Photo[];
+
+  @OneToMany((type) => Albom, (albom) => albom.persons)
+  alboms: Albom[];
 }
