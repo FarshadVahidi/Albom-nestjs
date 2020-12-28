@@ -32,15 +32,26 @@ export class PersonsService {
     return person;
   }
 
-  create(createPersonDto: CreatePersonDto) {
-    const person = this.personRepository.create(createPersonDto);
+  async create(createPersonDto: CreatePersonDto) {
+    const photos = await Promise.all(
+      createPersonDto.photos.map((name) => this.preloadPhotoByName(name)),
+    );
+
+    const person = this.personRepository.create({ ...createPersonDto, photos });
     return this.personRepository.save(person);
   }
 
   async update(id: string, updatePersonDto: UpdatePersonDto) {
+    const photos =
+      updatePersonDto.photos &&
+      (await Promise.all(
+        updatePersonDto.photos.map((name) => this.preloadPhotoByName(name)),
+      ));
+
     const person = await this.personRepository.preload({
       id: +id,
       ...updatePersonDto,
+      photos,
     });
     if (!person) {
       throw new NotFoundException('person with this ID not found');
@@ -51,5 +62,13 @@ export class PersonsService {
   async remove(id: string) {
     const person = await this.findOne(id);
     return this.personRepository.remove(person);
+  }
+
+  private async preloadPhotoByName(name: string): Promise<Photo> {
+    const existingPhoto = await this.photoRepository.findOne({ name });
+    if (existingPhoto) {
+      return existingPhoto;
+    }
+    return this.photoRepository.create({ name });
   }
 }

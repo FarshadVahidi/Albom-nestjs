@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Person } from './persons/person.entity';
 import { PhotoModule } from './photos/photo.module';
 import { Photo } from './photos/photo.entity';
+import { AlbomController } from './albom/albom.controller';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { Photo } from './photos/photo.entity';
     PersonsModule,
     PhotoModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, AlbomController],
   providers: [AppService],
 })
 export class AppModule {}
