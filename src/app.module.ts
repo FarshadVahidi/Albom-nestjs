@@ -6,7 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Person } from './persons/person.entity';
 import { PhotoModule } from './photos/photo.module';
 import { Photo } from './photos/photo.entity';
-import { AlbomController } from './albom/albom.controller';
+import { AlbomsModule } from './albom/alboms.module';
+import { Albom } from './albom/albom.entity';
 
 @Module({
   imports: [
@@ -17,13 +18,14 @@ import { AlbomController } from './albom/albom.controller';
       username: 'farshad',
       password: 'password',
       database: 'albom',
-      entities: [Person, Photo],
+      entities: [Person, Photo, Albom],
       synchronize: true,
     }),
     PersonsModule,
     PhotoModule,
+    AlbomsModule,
   ],
-  controllers: [AppController, AlbomController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
