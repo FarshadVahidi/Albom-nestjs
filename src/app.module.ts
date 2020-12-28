@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PersonsController } from './persons/persons.controller';
-import { PersonsService } from './persons/persons.service';
 import { PersonsModule } from './persons/persons.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Person } from './persons/person.entity';
+import { PhotoModule } from './photos/photo.module';
+import { Photo } from './photos/photo.entity';
 
 @Module({
   imports: [
@@ -16,10 +16,11 @@ import { Person } from './persons/person.entity';
       username: 'farshad',
       password: 'password',
       database: 'albom',
-      entities: [Person],
+      entities: [Person, Photo],
       synchronize: true,
     }),
     PersonsModule,
+    PhotoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
