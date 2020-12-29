@@ -6,8 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Person } from './persons/person.entity';
 import { PhotoModule } from './photos/photo.module';
 import { Photo } from './photos/photo.entity';
-import { AlbomsModule } from './albom/alboms.module';
-import { Albom } from './albom/albom.entity';
+import { AlbumsModule } from './album/albums.module';
+import { Album } from './album/album.entity';
 
 @Module({
   imports: [
@@ -18,12 +18,13 @@ import { Albom } from './albom/albom.entity';
       username: 'farshad',
       password: 'password',
       database: 'albom',
-      entities: [Person, Photo, Albom],
+      entities: [Person, Photo, Album],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     PersonsModule,
     PhotoModule,
-    AlbomsModule,
+    AlbumsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

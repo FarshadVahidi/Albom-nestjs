@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class CreateAlbomDto {
+export class CreateAlbumDto {
   @IsString()
   readonly name: string;
 

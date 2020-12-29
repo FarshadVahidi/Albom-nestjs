@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany } from 'typeorm';
 import { Person } from '../persons/person.entity';
-import { Albom } from '../albom/albom.entity';
+import { Album } from '../album/album.entity';
 
 @Entity()
 export class Photo {
@@ -15,6 +15,6 @@ export class Photo {
   })
   person: Person;
 
-  @ManyToMany((type) => Albom, (albom) => albom.photos)
-  alboms: Albom[];
+  @ManyToMany((type) => Album, (album) => album.photos)
+  albums: Album[];
 }

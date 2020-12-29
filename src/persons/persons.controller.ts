@@ -27,6 +27,11 @@ export class PersonsController {
     return this.personsService.findOne(id);
   }
 
+  @Get('album')
+  findAllAlbum() {
+    return 'this is list album';
+  }
+
   @Post()
   create(@Body() createPersonDto: CreatePersonDto) {
     return this.personsService.create(createPersonDto);

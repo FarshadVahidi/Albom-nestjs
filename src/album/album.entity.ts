@@ -10,7 +10,7 @@ import { Photo } from '../photos/photo.entity';
 import { Person } from '../persons/person.entity';
 
 @Entity()
-export class Albom {
+export class Album {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,9 +18,10 @@ export class Albom {
   name: string;
 
   @JoinTable()
-  @ManyToMany((type) => Photo, (photo) => photo.alboms, { cascade: true })
+  @ManyToMany((type) => Photo, (photo) => photo.albums, { cascade: true })
   photos: Photo[];
 
-  @ManyToOne((type) => Person, (person) => person.alboms, { cascade: true})
+  @JoinTable()
+  @ManyToOne((type) => Person, (person) => person.albums, { cascade: true })
   persons: Person[];
 }

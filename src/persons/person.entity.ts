@@ -6,7 +6,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { Photo } from '../photos/photo.entity';
-import { Albom } from '../albom/albom.entity';
+import { Album } from '../album/album.entity';
 
 @Entity()
 export class Person {
@@ -19,6 +19,6 @@ export class Person {
   @OneToMany((type) => Photo, (photo) => photo.person)
   photos: Photo[];
 
-  @OneToMany((type) => Albom, (albom) => albom.persons)
-  alboms: Albom[];
+  @OneToMany((type) => Album, (albom) => albom.persons)
+  albums: Album[];
 }

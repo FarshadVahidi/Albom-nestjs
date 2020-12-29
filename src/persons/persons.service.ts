@@ -18,13 +18,13 @@ export class PersonsService {
 
   findAll() {
     return this.personRepository.find({
-      relations: ['photos'],
+      relations: ['photos', 'albums'],
     });
   }
 
   async findOne(id: string) {
     const person = await this.personRepository.findOne(id, {
-      relations: ['photos'],
+      relations: ['photos', 'albums'],
     });
     if (!person) {
       throw new NotFoundException('person with ${id} not found');
@@ -33,12 +33,29 @@ export class PersonsService {
   }
 
   async create(createPersonDto: CreatePersonDto) {
-    const photos = await Promise.all(
-      createPersonDto.photos.map((name) => this.preloadPhotoByName(name)),
-    );
+    const queryRunner = this.connection.createQueryRunner();
 
-    const person = this.personRepository.create({ ...createPersonDto, photos });
-    return this.personRepository.save(person);
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const photos = await Promise.all(
+        createPersonDto.photos.map((name) => this.preloadPhotoByName(name)),
+      );
+
+      const person = this.personRepository.create({
+        ...createPersonDto,
+        photos,
+      });
+
+      await queryRunner.manager.save(person);
+      await queryRunner.commitTransaction();
+      return this.personRepository.save(person);
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async update(id: string, updatePersonDto: UpdatePersonDto) {
